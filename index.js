@@ -73,7 +73,6 @@ Add a New Employee
 
 promptUser()
   .then((data) => {
-    console.log(data);
     return generatePage(data);
   })
   .then((pageHTML) => {
