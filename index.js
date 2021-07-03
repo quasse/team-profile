@@ -2,45 +2,62 @@ const inquirer = require("inquirer");
 const generatePage = require("./src/page-template");
 const { writeFile } = require("./src/generate-site");
 
-const promptUser = (employees) => {
-  console.log(`
-==================
-Add a New Employee
-==================
-    `);
-
-  if (!employees) {
-    employees = [];
-  }
+const promptManager = () => {
+  const employees = [];
 
   return inquirer
     .prompt([
       {
         type: "input",
         name: "name",
-        message: "What is the name of your employee?",
+        message: "Please enter the name of the team manager",
       },
       {
         type: "input",
         name: "id",
-        message: "What is the employee's id?",
+        message: "What is the manager's id?",
       },
       {
         type: "input",
         name: "email",
-        message: "WHat is the email of the employee?",
-      },
-      {
-        type: "list",
-        name: "role",
-        message: "What is the employee's role?",
-        choices: ["Manager", "Engineer", "Intern"],
+        message: "What is the manager's email?",
       },
       {
         type: "input",
         name: "officeNumber",
-        message: "What is the employee's office number?",
-        when: (answers) => answers.role === "Manager",
+        message: "What is the manager's office number?",
+      },
+    ])
+    .then((answers) => {
+      employees.push(answers);
+      employees[0].role = "Manager";
+      return employees;
+    });
+};
+
+const promptEmployee = (employees) => {
+  return inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "role",
+        message: "Please add an employee from the list.",
+        choices: ["Engineer", "Intern"],
+      },
+      {
+        type: "input",
+        name: "name",
+        message: "Please enter the name of the employee",
+      },
+      {
+        type: "input",
+        name: "id",
+        message: "What is the id of the employee?",
+      },
+      {
+        type: "input",
+        name: "email",
+        message: "What is the employee's email?",
       },
       {
         type: "input",
@@ -64,14 +81,17 @@ Add a New Employee
     .then((answers) => {
       employees.push(answers);
       if (answers.confirmAddEmployee) {
-        return promptUser(employees);
+        return promptEmployee(employees);
       } else {
         return employees;
       }
     });
 };
 
-promptUser()
+promptManager()
+  .then((managerData) => {
+    return promptEmployee(managerData);
+  })
   .then((data) => {
     return generatePage(data);
   })
