@@ -9,12 +9,16 @@ const generateCards = (employees) => {
         return `
         <div class="card col-3 m-3">
             <div class="card-body bg-primary">
-                <h5 class="card-title">${employee.name}</h5>
-                <p class="card-text">${employee.role}</p>
+                <h5 class="card-title"><strong>${employee.name}</strong></h5>
+                <p class="card-text"><strong>${employee.role}</strong></p>
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item">ID: ${employee.id}</li>
-                <li class="list-group-item">Email: ${employee.email}</li>
+                <li class="list-group-item"><strong>ID</strong>: ${
+                  employee.id
+                }</li>
+                <li class="list-group-item"><strong>Email</strong>: <a href="mailto:${
+                  employee.email
+                }">${employee.email}</a></li>
                 <li class="list-group-item">${generateSpecialProperty(
                   employee
                 )}</li>
@@ -28,11 +32,11 @@ const generateCards = (employees) => {
 
 const generateSpecialProperty = (employee) => {
   if (employee.role === "Manager") {
-    return `Office Number: ${employee.officeNumber}`;
+    return `<strong>Office Number</strong>: ${employee.officeNumber}`;
   } else if (employee.role === "Engineer") {
-    return `GitHub Account: ${employee.github}`;
+    return `<strong>GitHub Account</strong>: <a href="https://github.com/${employee.github}">${employee.github}</a>`;
   } else {
-    return `School: ${employee.school}`;
+    return `<strong>School</strong>: ${employee.school}`;
   }
 };
 
